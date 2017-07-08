@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Pheditor
+ * Router
  * PHP file editor
  * Hamid Samak
  * https://github.com/hamidsamak/pheditor
@@ -9,7 +9,7 @@
  */
 
 define('PASSWORD', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec');
-define('EDITABLE_FORMATS', 'txt,php,htm,html,js,css,tpl,xml,md,conf');
+define('EDITABLE_FORMATS', 'txt,md,conf,crt,csr,key');
 define('LOG_FILE', __DIR__ . DIRECTORY_SEPARATOR . '.phedlog');
 define('SHOW_HIDDEN_FILES', false);
 
@@ -52,7 +52,7 @@ if (isset($_SESSION['pheditor_admin']) === false || $_SESSION['pheditor_admin'] 
 			file_put_contents(LOG_FILE, serialize($log));
 		}
 
-	die('<title>Router Simple Config</title><form method="post"><div style="text-align:center"><h1><a href="/" target="_blank" title="Router Simple Config" style="color:#444;text-decoration:none" tabindex="3">Pheditor</a></h1>' . (isset($error) ? '<p style="color:#dd0000">' . $error . '</p>' : null) . '<input id="pheditor_password" name="pheditor_password" type="password" value="" placeholder="Password&hellip;" tabindex="1"><br><br><input type="submit" value="Login" tabindex="2"></div></form><script type="text/javascript">document.getElementById("pheditor_password").focus();</script>');
+	die('<title>Router Simple Config</title><form method="post"><div style="text-align:center"><h1><a href="/" target="_blank" title="Router Simple Config" style="color:#444;text-decoration:none" tabindex="3">Router Config</a></h1>' . (isset($error) ? '<p style="color:#dd0000">' . $error . '</p>' : null) . '<input id="pheditor_password" name="pheditor_password" type="password" value="" placeholder="Password&hellip;" tabindex="1"><br><br><input type="submit" value="Login" tabindex="2"></div></form><script type="text/javascript">document.getElementById("pheditor_password").focus();</script>');
 }
 
 if (isset($_GET['logout'])) {
@@ -116,6 +116,10 @@ function files($dir, $display = 'block') {
 	asort($files);
 
 	foreach ($files as $key => $file) {
+		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		if ($ext == "php") {
+			continue;
+		}
 		if ($dir . DIRECTORY_SEPARATOR . $file == __FILE__ || (SHOW_HIDDEN_FILES === false && substr($file, 0, 1) === '.'))
 			continue;
 
@@ -538,9 +542,10 @@ document.onkeydown = function(event) {
 <div id="top">
 	<header>
 		<h1><a href="/" target="_blank" title="Router Simple Config">Router Simple Config</a></h1>
-                <span><a href="javascript:void(0);" onclick="return changePassword();">[Password]</a> &nbsp; 
+                <span><a href="javascript:void(0);" onclick="return changePassword();">[Password]</a>  
                 <a href="<?=$_SERVER['PHP_SELF']?>?logout=1">[Logout]</a></span>
-                <a href="reboot.php">[Reboot Router]</a></span>
+                <a href="status.php">[Router Status]</a></span>
+                <a href="reboot.php">[Apply & Reboot]</a></span>
 	</header>
 
 	<nav>
