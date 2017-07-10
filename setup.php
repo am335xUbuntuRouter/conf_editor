@@ -1,5 +1,5 @@
 <?php
-
+header('Content-Type: text/html; charset=UTF-8');
 /*
  * Router
  * PHP file editor
@@ -179,6 +179,12 @@ body {
 	margin: 0;
 	padding: 0;
 	color: #444;
+}
+
+#editor
+{
+  white-space: pre;
+  font-family: "Courier New", monospace;
 }
 
 a, a:visited, a:focus {
